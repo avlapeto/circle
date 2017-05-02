@@ -71,21 +71,20 @@ class MouseMoveListener{
     }
 
     handle(event, radiusBig, radiusSmall, border){
-        let rect = this.canvas.getElement().getBoundingClientRect();
+        let rect = this.canvas.getElement().getBoundingClientRect(),
 
         //Положение курсора относительно центра внутренней окружности
-        let relPosX = (event.clientX - rect.left) - ltlCircle.getCenter().x ;
-        let relPosY = (event.clientY - rect.left) - ltlCircle.getCenter().y ;
+        relPosX = (event.clientX - rect.left) - ltlCircle.getCenter().x,
+        relPosY = (event.clientY - rect.top) - ltlCircle.getCenter().y,
 
         //Квадрат гипотенузы перемещения
-        let delta_2 = (radiusSmall + border)**2 - (relPosX**2 + relPosY**2);
+        delta_2 = (radiusSmall + border)**2 - (relPosX**2 + relPosY**2);
 
         if(delta_2 <= 0) return; /*Нет необходимости перемещать внутреннюю окружность*/
 
-        let diffX = -Math.sqrt(delta_2)*Math.sign(relPosX)*Math.cos(Math.atan(Math.abs(relPosY/relPosX)));
-        let diffY = -Math.sqrt(delta_2)*Math.sign(relPosY)*Math.cos(Math.atan(Math.abs(relPosX/relPosY)));
-
-        let littleCircleInBigCircle = (this.littleCircle.getCenter().x + diffX - this.bigCircle.getCenter().x)**2 + (this.littleCircle.getCenter().y + diffY - this.bigCircle.getCenter().y)**2 <= (radiusBig-radiusSmall)**2;
+        let diffX = -Math.sqrt(delta_2)*Math.sign(relPosX)*Math.cos(Math.atan(Math.abs(relPosY/relPosX))),
+        diffY = -Math.sqrt(delta_2)*Math.sign(relPosY)*Math.cos(Math.atan(Math.abs(relPosX/relPosY))),
+        littleCircleInBigCircle = (this.littleCircle.getCenter().x + diffX - this.bigCircle.getCenter().x)**2 + (this.littleCircle.getCenter().y + diffY - this.bigCircle.getCenter().y)**2 <= (radiusBig-radiusSmall)**2;
 
         if(!littleCircleInBigCircle) return;
 
