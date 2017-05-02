@@ -27,8 +27,9 @@ class Circle{
 };
 
 class  littleCircle extends Circle{
-    constructor(radius, centerX, centerY, color, canvas){
+    constructor(radius, centerX, centerY, color, canvas, border){
         super(radius, centerX, centerY, color, canvas);
+        this.border = border;
     };
 
     move(centerX = 0, centerY = 0){
@@ -70,21 +71,21 @@ class MouseMoveListener{
         this.canvas = canvas;
     }
 
-    handle(event, radiusBig, radiusSmall, border){
+    handle(event){
         let rect = this.canvas.getElement().getBoundingClientRect(),
 
         //Положение курсора относительно центра внутренней окружности
-        relPosX = (event.clientX - rect.left) - ltlCircle.getCenter().x,
-        relPosY = (event.clientY - rect.top) - ltlCircle.getCenter().y,
+        relPosX = (event.clientX - rect.left) - this.littleCircle.getCenter().x,
+        relPosY = (event.clientY - rect.top) - this.littleCircle.getCenter().y,
 
         //Квадрат гипотенузы перемещения
-        delta_2 = (radiusSmall + border)**2 - (relPosX**2 + relPosY**2);
+        delta_2 = (this.littleCircle.radius + this.littleCircle.border)**2 - (relPosX**2 + relPosY**2);
 
         if(delta_2 <= 0) return; /*Нет необходимости перемещать внутреннюю окружность*/
 
         let diffX = -Math.sqrt(delta_2)*Math.sign(relPosX)*Math.cos(Math.atan(Math.abs(relPosY/relPosX))),
         diffY = -Math.sqrt(delta_2)*Math.sign(relPosY)*Math.cos(Math.atan(Math.abs(relPosX/relPosY))),
-        littleCircleInBigCircle = (this.littleCircle.getCenter().x + diffX - this.bigCircle.getCenter().x)**2 + (this.littleCircle.getCenter().y + diffY - this.bigCircle.getCenter().y)**2 <= (radiusBig-radiusSmall)**2;
+        littleCircleInBigCircle = (this.littleCircle.getCenter().x + diffX - this.bigCircle.getCenter().x)**2 + (this.littleCircle.getCenter().y + diffY - this.bigCircle.getCenter().y)**2 <= (this.bigCircle.radius- this.littleCircle.radius)**2;
 
         if(!littleCircleInBigCircle) return;
 
@@ -102,7 +103,7 @@ let border = 10,
     centerX = canvas.getWidth() / 2,
     centerY = canvas.getHeight() / 2,
     bigCircle = new Circle(radiusBig, centerX, centerY, 'red', canvas),
-    ltlCircle = new littleCircle(radiusSmall, centerX + 50, centerY + 50, 'black', canvas),
+    ltlCircle = new littleCircle(radiusSmall, centerX + 50, centerY + 50, 'black', canvas, border),
     mouseMoveListener = new MouseMoveListener(bigCircle, ltlCircle, canvas);
 
 
@@ -113,5 +114,5 @@ ltlCircle.draw();
 
 
 canvas.getElement().addEventListener('mousemove', (evt)=> {
-    mouseMoveListener.handle(evt, radiusBig, radiusSmall, border);
+    mouseMoveListener.handle(evt);
 }, false);
