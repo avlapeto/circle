@@ -27,7 +27,7 @@
 
         describe("Context", function() {
 
-            it("Есть контекст", function() {
+            it("Have context", function() {
                 assert.isOk(module.canvas.getContext(), 'Empty object');
             });
 
