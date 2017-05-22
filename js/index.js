@@ -121,6 +121,7 @@ let module = (()=>{
         bigCircle: bigCircle,
         centerX: centerX,
         centerY: centerY,
+        mouseMoveListener: mouseMoveListener,
     }
 })();
 

@@ -72,6 +72,28 @@
 
         });
 
+        describe("Run from coursor", function() {
+            let distance = module.ltlCircle.radius + module.ltlCircle.border;
+
+            it(`Moving to a distance = ${distance}px`, function() {
+                let event = {
+                    clientX: module.ltlCircle.getCenter().x + 1,
+                    clientY: module.ltlCircle.getCenter().y,
+                },
+                    diff = 0;
+
+                module.mouseMoveListener.handle(event);
+
+                diff = Math.sqrt((module.ltlCircle.getCenter().x - event.clientX)**2 +  (module.ltlCircle.getCenter().y - event.clientY)**2);
+
+                assert.isAbove(diff, distance, `Can't run from it!`);
+            });
+
+
+        });
+
+
+
     });
 
     mocha.run();
